@@ -840,7 +840,11 @@
     }
 
     function findXMPinJPEG(file) {
+        let dom = findRawXMPinJPEG(file);
+        return xml2Object(dom);
+    }
 
+    function findRawXMPinJPEG(file) {
         if (!('DOMParser' in self)) {
             // console.warn('XML parsing not supported without DOMParser');
             return;
@@ -883,7 +887,7 @@
                     + xmpString.slice(indexOfXmp)
 
                 var domDocument = dom.parseFromString(xmpString, 'text/xml');
-                return xml2Object(domDocument);
+                return domDocument;
             } else {
                 offset++;
             }
@@ -1050,10 +1054,8 @@
         let metadata = {
             exifdata: findEXIFinJPEG(file) || {},
             iptcdata: findIPTCinJPEG(file) || {},
+            rawxmpdata: findRawXMPinJPEG(file) || {}
         };
-
-        if (EXIF.isXmpEnabled)
-            metadata.xmpdata = findXMPinJPEG(file) || {};
 
         return metadata;
     }
