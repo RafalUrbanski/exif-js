@@ -840,8 +840,10 @@
     }
 
     function findXMPinJPEG(file) {
-        let dom = findRawXMPinJPEG(file);
-        return xml2Object(dom);
+        let xmpString = findRawXMPinJPEG(file);
+        let xmpDom = new DOMParser().parseFromString(xmpString, 'text/xml');
+
+        return xml2Object(xmpDom);
     }
 
     function findRawXMPinJPEG(file) {
@@ -858,8 +860,7 @@
         }
 
         var offset = 2,
-            length = file.byteLength,
-            dom = new DOMParser();
+            length = file.byteLength;
 
         while (offset < (length - 4)) {
             if (getStringFromDB(dataView, offset, 4) == "http") {
@@ -886,8 +887,7 @@
                     + 'xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" '
                     + xmpString.slice(indexOfXmp)
 
-                var domDocument = dom.parseFromString(xmpString, 'text/xml');
-                return domDocument;
+                return xmpString;
             } else {
                 offset++;
             }
