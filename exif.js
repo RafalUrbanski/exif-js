@@ -870,6 +870,9 @@
                 var xmpEndIndex = xmpString.indexOf('xmpmeta>') + 8;
                 xmpString = xmpString.substring(xmpString.indexOf('<x:xmpmeta'), xmpEndIndex);
 
+                if (xmpString.indexOf('x:xmpmeta') === -1)
+                    return "";
+
                 var indexOfXmp = xmpString.indexOf('x:xmpmeta') + 10
                 //Many custom written programs embed xmp/xml without any namespace. Following are some of them.
                 //Without these namespaces, XML is thought to be invalid by parsers
@@ -1054,7 +1057,7 @@
         let metadata = {
             exifdata: findEXIFinJPEG(file) || {},
             iptcdata: findIPTCinJPEG(file) || {},
-            rawxmpdata: findRawXMPinJPEG(file) || {}
+            rawxmpdata: findRawXMPinJPEG(file)
         };
 
         return metadata;
